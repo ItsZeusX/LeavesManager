@@ -24,6 +24,7 @@ async function getBalance(req) {
       available: 0,
     },
   };
+  
   leaves.forEach((leave) => {
     let duration = countNonWeekendDays(
       leave.start_date,

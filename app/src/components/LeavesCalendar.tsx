@@ -11,11 +11,14 @@ const LeavesCalendar = () => {
         setLeaveDates(data);
       });
   }, []);
+
   return (
     <div className="border p-10 h-full rounded-xl overflow-auto">
-      <table>
+      {/* <table>
         <tr>
           {dates?.map((date, index) => {
+            console.log(new Date(date).getDate());
+
             return (
               <td key={index} className="p-2 px-10 border h-10 text-center">
                 {new Date(date).getDate()}
@@ -24,24 +27,24 @@ const LeavesCalendar = () => {
           })}
         </tr>
         <tr>
-          {leaveDates?.map((date, index) =>
-            dates.find(
-              (d) => new Date(d).getTime() === new Date(date).getTime()
+          {dates?.map((date, index) =>
+            leaveDates.find(
+              (d) =>
+                new Date(d).getUTCDate() === new Date(date).getUTCDate() &&
+                new Date(d).getUTCMonth() === new Date(date).getUTCMonth()
             ) ? (
-              <td
-                key={index}
-                className="p-2 px-10 border h-10 text-center bg-red-200"
-              >
-                {new Date(date).getDate()}
+              <td key={index} className="p-2 px-10 border h-10 text-center ">
+                <div className="w-4 h-4 rounded-full bg-green-300"></div>
               </td>
             ) : (
-              <td key={index} className="p-2 px-10 border h-10 text-center">
-                X
-              </td>
+              <td
+                key={index}
+                className="p-2 px-10 border h-10 text-center"
+              ></td>
             )
           )}
         </tr>
-      </table>
+      </table> */}
     </div>
   );
 };

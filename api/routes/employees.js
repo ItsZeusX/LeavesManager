@@ -40,13 +40,16 @@ router.post("/add", async (req, res) => {
     res.json({ message: "Failed to add employee", error: err });
   }
 });
+
 //? LEAVES ----------------------------------------------------------------------------------
+//GET EMPLOYEE LEAVES ------------
 router.get("/leaves", async (req, res) => {
   const leaves = await Leave.find({
     employee_id: req.user._id,
   });
   res.json(leaves);
 });
+//GET LEAVES DATES --------------
 router.get("/leaves/dates", async (req, res) => {
   let dates = [];
   const leaves = await Leave.find({
@@ -58,6 +61,7 @@ router.get("/leaves/dates", async (req, res) => {
   });
   res.json(dates);
 });
+//ADD LEAVE ----------------------
 router.post("/leaves/add", async (req, res) => {
   try {
     //? CHECK BALANCE ----------------------------------------------------------------------------------
@@ -128,7 +132,7 @@ router.post("/leaves/add", async (req, res) => {
     res.json({ message: "Failed to add leave", error: err });
   }
 });
-
+//DELETE LEAVE -------------------
 router.post("/leaves/delete", async (req, res) => {
   try {
     await Leave.deleteOne({
@@ -139,6 +143,9 @@ router.post("/leaves/delete", async (req, res) => {
     res.json({ success: false, message: "Failed to delete leave", error: err });
   }
 });
+
+
+
 //? BALANCE ----------------------------------------------------------------------------------
 router.get("/balance", async (req, res) => {
   const balance = await getBalance(req);
