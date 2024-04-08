@@ -12,6 +12,7 @@ import { useContext, useEffect, useState } from "react";
 import Calendar from "./Calendar";
 import Balance from "./Balance";
 import storeContext from "../contexts/Store";
+import ErrorModal from "./Modals/ErrorModal";
 
 const LeavesAdder = () => {
   const leaveTypes = [
@@ -47,12 +48,17 @@ const LeavesAdder = () => {
       value: "afternoon",
     },
   ];
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  //SELECTION
   const [leaveType, setLeaveType] = useState("vacation");
   const [duration, setDuration] = useState("one");
-
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+
+  //ERROR MODAL
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const [errorData, setErrorData] = useState<any>([]);
 
   const { setRefreshEffect } = useContext(storeContext);
 
@@ -74,24 +80,29 @@ const LeavesAdder = () => {
         afternoon: duration === "afternoon",
         morning: duration === "morning",
       }),
-    }).then(() => {
-      setRefreshEffect((prev: boolean) => !prev);
-    });
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.success) {
+          setErrorModalOpen(true);
+          setErrorData(data);
+          return;
+        }
+        setRefreshEffect((prev: boolean) => !prev);
+      });
   };
 
-  //TO KEEp THE END DATE AFTER THE START DATE
+  //TO KEEP THE END DATE AFTER THE START DATE
   useEffect(() => {
     if (endDate < startDate) {
       setEndDate(startDate);
     }
   }, [startDate]);
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
   return (
     <div className="flex flex-col gap-5 w-full">
-      <div className="flex flex-col gap-4 font-Inter border p-6  h-fit rounded-lg font-poppins ">
-        <h2 className="text-2xl font-black">ADD LEAVE</h2>
+      <div className="flex flex-col gap-4 font-Inter border p-6  h-fit rounded-xl font-poppins ">
+        <h1 className="text-xl font-light text-zinc-600 ">ADD LEAVE</h1>
         {/* //? LEAVE TYPE ------------------------------------------------------ */}
         <Select
           isRequired
@@ -147,6 +158,7 @@ const LeavesAdder = () => {
         <Button size="sm" color="success" variant="flat" onClick={onOpen}>
           Submit
         </Button>
+        {/* //? CONFIRMATION MODAL ------------------------------------------------------ */}
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
             {(onClose) => (
@@ -174,6 +186,21 @@ const LeavesAdder = () => {
             )}
           </ModalContent>
         </Modal>
+        {/* //! ERROR MODAL */}
+        <ErrorModal
+          title={
+            errorData.error == "DATE_OVERLAP"
+              ? "Date Overlap"
+              : "Insufficient Balance"
+          }
+          body={
+            errorData.error == "DATE_OVERLAP"
+              ? "The leave you requested overlaps with another leave you have already applied for. Please check the dates and try again."
+              : "You do not have enough balance to apply for this leave"
+          }
+          isOpen={errorModalOpen}
+          setIsOpen={setErrorModalOpen}
+        ></ErrorModal>
       </div>
       <div className="p-6 border rounded-xl">
         <Balance></Balance>

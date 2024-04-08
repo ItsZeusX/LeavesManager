@@ -1,18 +1,19 @@
-import { useContext } from "react";
 import LeavesAdder from "./LeavesAdder";
-import storeContext from "../contexts/Store";
 import Leaves from "./Leaves";
+import LeavesCalendar from "./LeavesCalendar";
 
 export const LeavesContainer = () => {
-  const { user } = useContext(storeContext);
   return (
-    <div className="flex gap-5 p-10 w-full h-screen">
-      <div className="w-2/5">
-        <LeavesAdder />
+    <div className="flex flex-col p-10  gap-5 h-screen w-full overflow-x-hidden">
+      <div className="flex gap-5 ">
+        <div className="w-1/3">
+          <LeavesAdder />
+        </div>
+        <div className="w-2/3">
+          <Leaves />
+        </div>
       </div>
-      <div className="w-3/5">
-        <Leaves />
-      </div>
+      <LeavesCalendar />
     </div>
   );
 };
