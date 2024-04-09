@@ -19,12 +19,12 @@ const Employees = () => {
   }, []);
   return (
     <div className="border p-10">
-      <h1 className="font-black">EMPLOYEES</h1>
+      <h1 className="text-xl font-light text-zinc-600 ">EMPLOYÉES</h1>
+
       <Table removeWrapper className="font-poppins" isCompact>
         <TableHeader>
-          <TableColumn>NAME</TableColumn>
-          <TableColumn>LASTNAME</TableColumn>
-
+          <TableColumn>PRENOM</TableColumn>
+          <TableColumn>NOM</TableColumn>
           <TableColumn>EMAIL</TableColumn>
           <TableColumn>ROLE</TableColumn>
         </TableHeader>

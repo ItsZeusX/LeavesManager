@@ -16,7 +16,16 @@ const Leaves = () => {
   useEffect(() => {
     fetch("/api/employees/leaves")
       .then((res) => res.json())
-      .then((data) => setLeaves(data))
+      .then((data) =>
+        setLeaves(
+          //sort by start_date
+          data.sort(
+            (a: any, b: any) =>
+              new Date(a.start_date).getTime() -
+              new Date(b.start_date).getTime()
+          )
+        )
+      )
       .then(() => console.log(leaves));
   }, [refreshEffect]);
 
@@ -42,15 +51,15 @@ const Leaves = () => {
   };
   return (
     <div className="flex flex-col gap-4 font-Inter border p-6   rounded-lg font-poppins h-full overflow-auto   ">
-      <h1 className="text-xl font-light text-zinc-600 ">MY LEAVES</h1>
+      <h1 className="text-xl font-light text-zinc-600 ">MES CONGÉS</h1>
       <Table removeWrapper className="font-poppins" isCompact>
         <TableHeader>
           <TableColumn>TYPE</TableColumn>
-          <TableColumn>SUBTYPE</TableColumn>
-          <TableColumn>START DATE</TableColumn>
-          <TableColumn>END DATE</TableColumn>
-          <TableColumn>DURATION</TableColumn>
-          <TableColumn>STATUS</TableColumn>
+          <TableColumn>SOUS-TYPE</TableColumn>
+          <TableColumn>DATE DE DÉBUT</TableColumn>
+          <TableColumn>DATE DE FIN</TableColumn>
+          <TableColumn>DURÉE</TableColumn>
+          <TableColumn>STATUT</TableColumn>
           <TableColumn>ACTIONS</TableColumn>
         </TableHeader>
         <TableBody emptyContent={"No leaves to display."}>
@@ -60,11 +69,11 @@ const Leaves = () => {
               new Date(leave.end_date),
               leave.morning || leave.afternoon
             );
-            let subtype = duration == 1 ? "One Day" : "Range";
+            let subtype = duration == 1 ? "Une Journée" : "Plusieurs";
             if (leave.morning) {
-              subtype = "Morning";
+              subtype = "Matin";
             } else if (leave.afternoon) {
-              subtype = "Afternoon";
+              subtype = "Après-midi";
             }
 
             return (
@@ -82,10 +91,10 @@ const Leaves = () => {
                     }
                   >
                     {leave.type === "vacation"
-                      ? "Vacation"
+                      ? "Payé"
                       : leave.type === "sick"
-                      ? "Sick"
-                      : "Unpaid"}
+                      ? "Maladie"
+                      : "Sans solde"}
                   </Chip>
                 </TableCell>
                 <TableCell> {subtype}</TableCell>
@@ -94,10 +103,10 @@ const Leaves = () => {
                 <TableCell>
                   {duration > 1 && duration}{" "}
                   {duration === 0.5
-                    ? "Half a Day"
+                    ? "Demi-journée"
                     : duration === 1
-                    ? "One Day"
-                    : "Days"}
+                    ? "Une Journée"
+                    : "Jours"}
                 </TableCell>
                 <TableCell>
                   <Chip
@@ -112,14 +121,14 @@ const Leaves = () => {
                     }
                   >
                     {leave.status === "approved"
-                      ? "Approved"
+                      ? "Approuvé"
                       : leave.status === "pending"
-                      ? "Pending"
-                      : "Rejected"}
+                      ? "En Attente"
+                      : "Rejeté"}
                   </Chip>
                 </TableCell>
                 <TableCell>
-                  <Tooltip color="danger" content="Delete Leave">
+                  <Tooltip color="danger" content="Supprimer">
                     <span
                       className="text-lg text-danger cursor-pointer active:opacity-50"
                       onClick={() => handleDeleteLeave(leave._id)}

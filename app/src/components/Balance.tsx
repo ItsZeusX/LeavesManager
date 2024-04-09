@@ -22,16 +22,16 @@ const Balance = () => {
     balance && (
       <Table removeWrapper className="font-poppins" isCompact>
         <TableHeader>
-          <TableColumn>BALANCE</TableColumn>
-          <TableColumn>USED</TableColumn>
-          <TableColumn>AVAILABLE</TableColumn>
-          <TableColumn>ALLOWANCE</TableColumn>
+          <TableColumn>SOLDE</TableColumn>
+          <TableColumn>UTILISÉ</TableColumn>
+          <TableColumn>DISPONIBLE</TableColumn>
+          <TableColumn>TOTAL</TableColumn>
         </TableHeader>
         <TableBody>
           <TableRow key="1">
             <TableCell>
               <Chip color="success" variant="flat">
-                Vacation
+                Payé
               </Chip>
             </TableCell>
             <TableCell>{balance?.vacation.used}</TableCell>
@@ -41,7 +41,7 @@ const Balance = () => {
           <TableRow key="2">
             <TableCell>
               <Chip color="warning" variant="flat">
-                Sick
+                Maladie
               </Chip>
             </TableCell>
             <TableCell>{balance?.sick.used}</TableCell>
@@ -51,7 +51,7 @@ const Balance = () => {
           <TableRow key="3">
             <TableCell>
               <Chip color="danger" variant="flat">
-                Unpaid
+                Sans solde
               </Chip>
             </TableCell>
             <TableCell>{balance?.unpaid.used}</TableCell>

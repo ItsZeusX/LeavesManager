@@ -17,34 +17,34 @@ import ErrorModal from "./Modals/ErrorModal";
 const LeavesAdder = () => {
   const leaveTypes = [
     {
-      label: "Vacation",
+      label: "Congé payé",
       value: "vacation",
     },
     {
-      label: "Unpaid Leave",
+      label: "Congé sans solde",
       value: "unpaid",
     },
     {
-      label: "Sick Leave",
+      label: "Congé maladie",
       value: "sick",
     },
   ];
 
   const durations = [
     {
-      label: "One Day",
+      label: "Une journée",
       value: "one",
     },
     {
-      label: "Range of Days",
+      label: "Nombre de jours",
       value: "range",
     },
     {
-      label: "Morning",
+      label: "Matin",
       value: "morning",
     },
     {
-      label: "Afternoon",
+      label: "Après-midi",
       value: "afternoon",
     },
   ];
@@ -55,7 +55,7 @@ const LeavesAdder = () => {
   const [duration, setDuration] = useState("one");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-
+  const [comment, setComment] = useState("");
   //ERROR MODAL
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [errorData, setErrorData] = useState<any>([]);
@@ -102,13 +102,14 @@ const LeavesAdder = () => {
   return (
     <div className="flex flex-col gap-5 w-full">
       <div className="flex flex-col gap-4 font-Inter border p-6  h-fit rounded-xl font-poppins ">
-        <h1 className="text-xl font-light text-zinc-600 ">ADD LEAVE</h1>
+        <h1 className="text-xl font-light text-zinc-600 ">AJOUTER CONGÉ </h1>
+
         {/* //? LEAVE TYPE ------------------------------------------------------ */}
         <Select
           isRequired
           size="sm"
-          label="Leave Type"
-          placeholder="Select a leave type"
+          label="Type de congé"
+          placeholder="Selectionnez un type de congé"
           defaultSelectedKeys={[leaveType]}
           value={leaveType}
           onChange={(e) => setLeaveType(e.target.value)}
@@ -123,8 +124,8 @@ const LeavesAdder = () => {
         <Select
           isRequired
           size="sm"
-          label="Duration"
-          placeholder="Duration of leave"
+          label="Durée de congé"
+          placeholder="Durée de congé"
           value={duration}
           defaultSelectedKeys={[duration]}
           onChange={(e) => setDuration(e.target.value)}
@@ -140,7 +141,7 @@ const LeavesAdder = () => {
           <Calendar
             date={startDate}
             setDate={setStartDate}
-            label="Start Date"
+            label="Date de début"
           ></Calendar>
           {/* //? END DATE ------------------------------------------------------ */}
           {duration === "range" && (
@@ -148,16 +149,22 @@ const LeavesAdder = () => {
               date={endDate}
               setDate={setEndDate}
               minDate={startDate}
-              label="End Date"
+              label="Date de fin"
             ></Calendar>
           )}
         </div>
         {/* //? COMMENT ------------------------------------------------------ */}
-        <Input placeholder="Comment" type="text" />
+        <Input
+          placeholder="Commentaire"
+          type="text"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
         {/* //? SUBMIT ------------------------------------------------------ */}
         <Button size="sm" color="success" variant="flat" onClick={onOpen}>
-          Submit
+          Confirmer
         </Button>
+
         {/* //? CONFIRMATION MODAL ------------------------------------------------------ */}
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
@@ -167,11 +174,14 @@ const LeavesAdder = () => {
                   Confirmation
                 </ModalHeader>
                 <ModalBody>
-                  <p>Are you sure you want to submit this leave request</p>
+                  <p>
+                    Êtes-vous sûr(e) de vouloir soumettre cette demande de congé
+                    ?
+                  </p>
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={onClose}>
-                    Close
+                    Fermer
                   </Button>
                   <Button
                     variant="flat"
@@ -179,7 +189,7 @@ const LeavesAdder = () => {
                     onPress={onClose}
                     onClick={() => handleAddLeave()}
                   >
-                    Confirm
+                    Oui
                   </Button>
                 </ModalFooter>
               </>
@@ -190,13 +200,13 @@ const LeavesAdder = () => {
         <ErrorModal
           title={
             errorData.error == "DATE_OVERLAP"
-              ? "Date Overlap"
-              : "Insufficient Balance"
+              ? "Chevauchement de dates"
+              : "Solde insuffisant"
           }
           body={
             errorData.error == "DATE_OVERLAP"
-              ? "The leave you requested overlaps with another leave you have already applied for. Please check the dates and try again."
-              : "You do not have enough balance to apply for this leave"
+              ? "Le congé que vous avez demandé chevauche un autre congé pour lequel vous avez déjà fait une demande. Veuillez vérifier les dates et réessayer."
+              : "Vous n'avez pas assez de solde pour demander ce congé."
           }
           isOpen={errorModalOpen}
           setIsOpen={setErrorModalOpen}

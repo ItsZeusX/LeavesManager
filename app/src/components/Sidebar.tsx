@@ -7,12 +7,16 @@ export const Sidebar = () => {
 
   const sidebarItems = [
     {
-      name: "Leaves",
+      name: "Congés",
       path: "/leaves",
     },
     {
-      name: "Employees",
+      name: "Employées",
       path: "/employees",
+    },
+    {
+      name: "Test",
+      path: "/test",
     },
   ];
   return (
