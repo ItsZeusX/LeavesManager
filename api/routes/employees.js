@@ -44,9 +44,18 @@ router.post("/add", async (req, res) => {
 //? LEAVES ----------------------------------------------------------------------------------
 //GET EMPLOYEE LEAVES ------------
 router.get("/leaves", async (req, res) => {
-  const leaves = await Leave.find({
+  let leaves = await Leave.find({
     employee_id: req.user._id,
+  }).lean();
+  //add duration
+  leaves.forEach((leave) => {
+    leave.duration = countNonWeekendDays(
+      leave.start_date,
+      leave.end_date,
+      leave.afternoon || leave.morning
+    );
   });
+
   res.json(leaves);
 });
 //GET LEAVES DATES --------------
@@ -58,6 +67,10 @@ router.get("/leaves/dates", async (req, res) => {
   leaves.forEach((leave) => {
     let currentDates = datesBetween(leave.start_date, leave.end_date);
     dates = dates.concat(currentDates);
+  });
+  //SORT
+  dates = dates.sort((a, b) => {
+    return new Date(a) - new Date(b);
   });
   res.json(dates);
 });
@@ -71,7 +84,6 @@ router.post("/leaves/add", async (req, res) => {
       req.body.afternoon || req.body.morning
     );
     const balance = await getBalance(req);
-    console.log(duration, balance);
     let canRequest = balance[req.body.type].available >= duration;
     if (!canRequest) {
       return res.json({
@@ -143,8 +155,6 @@ router.post("/leaves/delete", async (req, res) => {
     res.json({ success: false, message: "Failed to delete leave", error: err });
   }
 });
-
-
 
 //? BALANCE ----------------------------------------------------------------------------------
 router.get("/balance", async (req, res) => {

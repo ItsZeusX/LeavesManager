@@ -11,23 +11,7 @@ import {
 } from "@nextui-org/react";
 import { DeleteIcon } from "../icons/DeleteIcon";
 const Leaves = () => {
-  const { refreshEffect, setRefreshEffect } = useContext(storeContext);
-  const [leaves, setLeaves] = useState<any>([]);
-  useEffect(() => {
-    fetch("/api/employees/leaves")
-      .then((res) => res.json())
-      .then((data) =>
-        setLeaves(
-          //sort by start_date
-          data.sort(
-            (a: any, b: any) =>
-              new Date(a.start_date).getTime() -
-              new Date(b.start_date).getTime()
-          )
-        )
-      )
-      .then(() => console.log(leaves));
-  }, [refreshEffect]);
+  const { leaves, setRefreshEffect } = useContext(storeContext);
 
   const handleDeleteLeave = (_id: string) => {
     fetch("/api/employees/leaves/delete", {
@@ -36,18 +20,9 @@ const Leaves = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ _id }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setLeaves(
-            leaves.filter((leave: any) => {
-              return leave._id !== _id;
-            })
-          );
-        }
-        setRefreshEffect(!refreshEffect);
-      });
+    }).then(() => {
+      setRefreshEffect((prev: boolean) => !prev);
+    });
   };
   return (
     <div className="flex flex-col gap-4 font-Inter border p-6   rounded-lg font-poppins h-full overflow-auto   ">
@@ -64,12 +39,7 @@ const Leaves = () => {
         </TableHeader>
         <TableBody emptyContent={"No leaves to display."}>
           {leaves?.map((leave: any) => {
-            let duration = countNonWeekendDays(
-              new Date(leave.start_date),
-              new Date(leave.end_date),
-              leave.morning || leave.afternoon
-            );
-            let subtype = duration == 1 ? "Une Journée" : "Plusieurs";
+            let subtype = leave.duration == 1 ? "Une Journée" : "Plusieurs";
             if (leave.morning) {
               subtype = "Matin";
             } else if (leave.afternoon) {
@@ -101,10 +71,10 @@ const Leaves = () => {
                 <TableCell> {formatDate(new Date(leave.start_date))}</TableCell>
                 <TableCell> {formatDate(new Date(leave.end_date))}</TableCell>
                 <TableCell>
-                  {duration > 1 && duration}{" "}
-                  {duration === 0.5
+                  {leave.duration > 1 && leave.duration}{" "}
+                  {leave.duration === 0.5
                     ? "Demi-journée"
-                    : duration === 1
+                    : leave.duration === 1
                     ? "Une Journée"
                     : "Jours"}
                 </TableCell>

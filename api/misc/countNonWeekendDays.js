@@ -1,3 +1,4 @@
+const moment = require("moment");
 function countNonWeekendDays(startDate, endDate, isHalfDay) {
   if (isHalfDay) {
     return 0.5;
@@ -8,19 +9,19 @@ function countNonWeekendDays(startDate, endDate, isHalfDay) {
   }
 
   let count = 0;
-  let currentDate = new Date(startDate);
+  let currentDate = moment.utc(startDate);
 
   // Loop through each day between start and end dates
-  while (currentDate < endDate) {
+  while (currentDate <= endDate) {
     // Check if the current day is not Saturday (6) or Sunday (0)
-    if (currentDate.getDay() !== 6 && currentDate.getDay() !== 0) {
+    if (currentDate.day() !== 6 && currentDate.day() !== 0) {
       count++;
     }
     // Move to the next day
-    currentDate.setDate(currentDate.getDate() + 1);
+    currentDate.add(1, "days");
   }
 
-  return count + 1;
+  return count;
 }
 
 module.exports = countNonWeekendDays;

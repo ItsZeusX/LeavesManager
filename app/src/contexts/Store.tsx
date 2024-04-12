@@ -4,6 +4,7 @@ const storeContext = createContext<any>(null);
 
 export function StoreProvider({ children }: any) {
   const [user, setUser] = useState<any>();
+  const [leaves, setLeaves] = useState<any[]>([]);
   const [refreshEffect, setRefreshEffect] = useState<boolean>(false);
 
   return (
@@ -13,6 +14,8 @@ export function StoreProvider({ children }: any) {
         setUser,
         refreshEffect,
         setRefreshEffect,
+        leaves,
+        setLeaves,
       }}
     >
       {children}

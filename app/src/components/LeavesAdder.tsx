@@ -9,6 +9,7 @@ import {
 } from "@nextui-org/react";
 
 import { useContext, useEffect, useState } from "react";
+import moment from "moment";
 import Calendar from "./Calendar";
 import Balance from "./Balance";
 import storeContext from "../contexts/Store";
@@ -63,10 +64,8 @@ const LeavesAdder = () => {
   const { setRefreshEffect } = useContext(storeContext);
 
   const handleAddLeave = () => {
-    const start_date = new Date(startDate);
-    start_date.setHours(0, 0, 0, 0);
-    const end_date = new Date(endDate);
-    end_date.setHours(0, 0, 0, 0);
+    const start_date = moment.utc(startDate).startOf("day");
+    const end_date = moment.utc(endDate).startOf("day");
 
     fetch("/api/employees/leaves/add", {
       method: "POST",
@@ -140,14 +139,18 @@ const LeavesAdder = () => {
         <div className="flex gap-2">
           <Calendar
             date={startDate}
-            setDate={setStartDate}
+            setDate={(date: Date) => {
+              setStartDate(date);
+            }}
             label="Date de début"
           ></Calendar>
           {/* //? END DATE ------------------------------------------------------ */}
           {duration === "range" && (
             <Calendar
               date={endDate}
-              setDate={setEndDate}
+              setDate={(date: Date) => {
+                setEndDate(date);
+              }}
               minDate={startDate}
               label="Date de fin"
             ></Calendar>

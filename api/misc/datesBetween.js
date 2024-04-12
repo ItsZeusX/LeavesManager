@@ -1,10 +1,12 @@
+const moment = require("moment");
+
 function datesBetween(startDate, endDate) {
   const dates = [];
-  let currentDate = new Date(startDate);
+  let currentDate = moment.utc(startDate);
 
   while (currentDate <= endDate) {
-    dates.push(new Date(currentDate));
-    currentDate.setDate(currentDate.getDate() + 1);
+    dates.push(moment.utc(currentDate));
+    currentDate.add(1, "days");
   }
 
   return dates;
