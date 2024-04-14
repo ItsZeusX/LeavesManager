@@ -106,7 +106,13 @@ const LeavesCalendar = () => {
             ) : (
               <td
                 key={index}
-                className="p-2 px-4 min-w-14  border h-10 text-center"
+                className={classNames(
+                  "p-2 px-4 min-w-14  border h-10 text-center",
+                  {
+                    "bg-zinc-200 border-none":
+                      date.weekday() == 6 || date.weekday() == 0,
+                  }
+                )}
               ></td>
             );
           })}

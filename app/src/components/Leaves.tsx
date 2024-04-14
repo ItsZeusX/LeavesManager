@@ -10,6 +10,7 @@ import {
   TableCell,
 } from "@nextui-org/react";
 import { DeleteIcon } from "../icons/DeleteIcon";
+import moment from "moment";
 const Leaves = () => {
   const { leaves, setRefreshEffect } = useContext(storeContext);
 
@@ -68,8 +69,13 @@ const Leaves = () => {
                   </Chip>
                 </TableCell>
                 <TableCell> {subtype}</TableCell>
-                <TableCell> {formatDate(new Date(leave.start_date))}</TableCell>
-                <TableCell> {formatDate(new Date(leave.end_date))}</TableCell>
+                <TableCell>
+                  {" "}
+                  {moment(leave.start_date).format("D MMMM, YYYY")}
+                </TableCell>
+                <TableCell>
+                  {moment(leave.end_date).format("D MMMM, YYYY")}
+                </TableCell>
                 <TableCell>
                   {leave.duration > 1 && leave.duration}{" "}
                   {leave.duration === 0.5
@@ -139,32 +145,4 @@ function formatDate(date: Date) {
   return `${day} ${month}, ${year}`;
 }
 
-function countNonWeekendDays(
-  startDate: Date,
-  endDate: Date,
-  isHalfDay: boolean
-) {
-  if (isHalfDay) {
-    return 0.5;
-  }
-  // Make sure start date is before end date
-  if (startDate > endDate) {
-    return 0;
-  }
-
-  let count = 0;
-  let currentDate = new Date(startDate);
-
-  // Loop through each day between start and end dates
-  while (currentDate < endDate) {
-    // Check if the current day is not Saturday (6) or Sunday (0)
-    if (currentDate.getDay() !== 6 && currentDate.getDay() !== 0) {
-      count++;
-    }
-    // Move to the next day
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
-
-  return count + 1;
-}
 export default Leaves;
