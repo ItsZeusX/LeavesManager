@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Chip, Tooltip } from "@nextui-org/react";
+import { Button, Chip, Tooltip } from "@nextui-org/react";
 import {
   Table,
   TableHeader,
@@ -11,6 +11,7 @@ import {
 import moment from "moment";
 import storeContext from "../../contexts/Store";
 import { DeleteIcon } from "../../icons/DeleteIcon";
+import { ApproveIcon } from "../../icons/ApproveIcon";
 const LeavesToCheck = () => {
   const { setRefreshEffect } = useContext(storeContext);
   const [leaves, setLeaves] = useState([]);
@@ -63,6 +64,7 @@ const LeavesToCheck = () => {
                 <TableColumn>DATE DE FIN</TableColumn>
                 <TableColumn>DURÉE</TableColumn>
                 <TableColumn>STATUT</TableColumn>
+                <TableColumn>ACTIONS</TableColumn>
               </TableHeader>
               <TableBody emptyContent={"No leaves to display."}>
                 {leaves?.map((leave: any, index: number) => {
@@ -139,6 +141,27 @@ const LeavesToCheck = () => {
                             ? "En Attente"
                             : "Rejeté"}
                         </Chip>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            color="success"
+                            radius="full"
+                            variant="flat"
+                          >
+                            Approuver
+                          </Button>
+                          <Button
+                            size="sm"
+                            startContent={<DeleteIcon />}
+                            color="danger"
+                            radius="full"
+                            variant="flat"
+                          >
+                            Rejeter
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
