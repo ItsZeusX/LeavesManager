@@ -10,8 +10,9 @@ const PORT = process.env.PORT || 3000;
 const Employee = require("./schema/Employee");
 //ROUTERS
 const employeesRouter = require("./routes/employees");
+const managerRouter = require("./routes/manager");
 app.use("/api/employees", employeesRouter);
-
+app.use("/api/manager", managerRouter);
 //MIDDLEWARE
 const authenticateToken = require("./middleware/authenticateToken");
 app.use(express.json());

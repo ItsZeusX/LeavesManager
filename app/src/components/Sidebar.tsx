@@ -15,8 +15,8 @@ export const Sidebar = () => {
       path: "/employees",
     },
     {
-      name: "Test",
-      path: "/test",
+      name: "Dashboard",
+      path: "/dashboard",
     },
   ];
   return (

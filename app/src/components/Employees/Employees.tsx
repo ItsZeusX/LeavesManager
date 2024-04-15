@@ -39,9 +39,9 @@ const Employees = () => {
                 <TableCell>
                   <Chip
                     variant="flat"
-                    className="font-black"
+                    className="font-black"  
                     color={
-                      employee.role === "owner"
+                      employee.role === "admin"
                         ? "primary"
                         : employee.role === "manager"
                         ? "danger"

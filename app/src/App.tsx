@@ -11,7 +11,8 @@ import { useContext, useEffect, useState } from "react";
 import storeContext from "./contexts/Store";
 import { Sidebar } from "./components/Sidebar";
 import EmployeesContainer from "./components/Employees/EmployeesContainer";
-import TestComponent from "./components/Test/TestComponent";
+import DashboardContainer from "./components/Dashboard/DashboardContainer";
+
 
 function App() {
   const { setUser } = useContext(storeContext);
@@ -60,11 +61,11 @@ function App() {
                 }
               ></Route>
               <Route
-                path="/test"
+                path="/dashboard"
                 element={
                   <div className="flex ">
                     <Sidebar />
-                    <TestComponent />
+                    <DashboardContainer />
                   </div>
                 }
               ></Route>
