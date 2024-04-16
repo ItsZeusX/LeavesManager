@@ -1,12 +1,18 @@
 const express = require("express");
-const authenticateManagerToken = require("../middleware/authenticateManagerToken");
 const router = express.Router();
+const cookieParser = require("cookie-parser");
 
 //SCHEMA
 const Employee = require("../schema/Employee");
 const countNonWeekendDays = require("../misc/countNonWeekendDays");
+const Leave = require("../schema/Leave");
 
-// router.use(authenticateManagerToken);
+//MIDLEWARE
+router.use(express.json());
+router.use(cookieParser());
+
+const authenticateManagerToken = require("../middleware/authenticateManagerToken");
+router.use(authenticateManagerToken);
 
 router.get("/employees", async (req, res) => {
   let employees = await Employee.aggregate([
@@ -34,6 +40,22 @@ router.get("/employees", async (req, res) => {
   });
 
   res.json(employees);
+});
+
+//approve leave
+router.patch("/leaves/:id/approve", async (req, res) => {
+  let leave = await Leave.findById(req.params.id);
+  leave.status = "approved";
+  leave.save();
+  res.json(leave);
+});
+
+//reject leave
+router.patch("/leaves/:id/reject", async (req, res) => {
+  let leave = await Leave.findById(req.params.id);
+  leave.status = "rejected";
+  leave.save();
+  res.json(leave);
 });
 
 module.exports = router;

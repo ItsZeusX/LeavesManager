@@ -78,6 +78,7 @@ const LeavesAdder = () => {
         end_date: duration === "range" ? end_date : start_date,
         afternoon: duration === "afternoon",
         morning: duration === "morning",
+        comment: comment,
       }),
     })
       .then((res) => res.json())

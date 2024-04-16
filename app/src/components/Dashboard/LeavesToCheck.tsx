@@ -10,40 +10,43 @@ import {
 } from "@nextui-org/react";
 import moment from "moment";
 import storeContext from "../../contexts/Store";
-import { DeleteIcon } from "../../icons/DeleteIcon";
-import { ApproveIcon } from "../../icons/ApproveIcon";
+import LeaveApprovalModal from "../Modals/LeaveApprovalModal";
+import { MdEdit } from "react-icons/md";
+
 const LeavesToCheck = () => {
-  const { setRefreshEffect } = useContext(storeContext);
+  const { refreshEffect, setRefreshEffect } = useContext(storeContext);
   const [leaves, setLeaves] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [isGrouped, setIsGrouped] = useState(true);
+
+  //MODAL
+  const [selectedLeave, setSelectedLeave] = useState({} as any);
+  const [selectedEmployee, setSelectedEmployee] = useState({} as any);
+  const [isOpen, setIsOpen] = useState(false);
+
   useEffect(() => {
     fetch("/api/manager/employees")
-      .then((res) => res.json())
+      .then((res) => {
+        return res.ok ? res.json() : [];
+      })
       .then((data) => {
         setEmployees(data);
       });
-  }, []);
+  }, [refreshEffect]);
 
   useEffect(() => {
     if (employees.length === 0) return;
     let leaves: any = [];
-    employees.forEach((employee: any) => {
+    employees?.forEach((employee: any) => {
       leaves = [...leaves, ...employee.leaves];
     });
     setLeaves(leaves);
   }, [employees]);
 
-  const handleDeleteLeave = (_id: string) => {
-    fetch("/api/employees/leaves/delete", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ _id }),
-    }).then(() => {
-      setRefreshEffect((prev: boolean) => !prev);
-    });
+  const openLeaveModal = (leave: any, employee: any) => {
+    setSelectedEmployee(employee);
+    setSelectedLeave(leave);
+    setIsOpen(true);
   };
 
   return (
@@ -55,9 +58,7 @@ const LeavesToCheck = () => {
           return (
             <Table removeWrapper className="font-poppins" isCompact>
               <TableHeader>
-                <TableColumn maxWidth="10" align="center">
-                  EMPLOYE
-                </TableColumn>
+                <TableColumn>EMPLOYE</TableColumn>
                 <TableColumn>TYPE</TableColumn>
                 <TableColumn>SOUS-TYPE</TableColumn>
                 <TableColumn>DATE DE DÉBUT</TableColumn>
@@ -78,7 +79,7 @@ const LeavesToCheck = () => {
 
                   return (
                     <TableRow>
-                      <TableCell className="w-52">
+                      <TableCell className="w-60">
                         {index === 0 && (
                           <>
                             <div>{`${employee.name} ${employee.lastname}`}</div>
@@ -143,25 +144,22 @@ const LeavesToCheck = () => {
                         </Chip>
                       </TableCell>
                       <TableCell>
-                        <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            color="success"
-                            radius="full"
-                            variant="flat"
+                        {leave.status === "pending" && (
+                          <Tooltip
+                            placement="left"
+                            content="Approuver ou Rejeter"
                           >
-                            Approuver
-                          </Button>
-                          <Button
-                            size="sm"
-                            startContent={<DeleteIcon />}
-                            color="danger"
-                            radius="full"
-                            variant="flat"
-                          >
-                            Rejeter
-                          </Button>
-                        </div>
+                            <div
+                              className="w-full"
+                              onClick={() => openLeaveModal(leave, employee)}
+                            >
+                              <MdEdit
+                                size="18px"
+                                className="text-gray-600 cursor-pointer"
+                              />
+                            </div>
+                          </Tooltip>
+                        )}
                       </TableCell>
                     </TableRow>
                   );
@@ -264,6 +262,13 @@ const LeavesToCheck = () => {
           </TableBody>
         </Table>
       )}
+
+      <LeaveApprovalModal
+        employee={selectedEmployee}
+        leave={selectedLeave}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      ></LeaveApprovalModal>
     </div>
   );
 };

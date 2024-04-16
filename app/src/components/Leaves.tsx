@@ -104,14 +104,17 @@ const Leaves = () => {
                   </Chip>
                 </TableCell>
                 <TableCell>
-                  <Tooltip color="danger" content="Supprimer">
-                    <span
-                      className="text-lg text-danger cursor-pointer active:opacity-50"
-                      onClick={() => handleDeleteLeave(leave._id)}
-                    >
-                      <DeleteIcon />
-                    </span>
-                  </Tooltip>
+                  {(leave.status === "pending" ||
+                    leave.status === "rejected") && (
+                    <Tooltip color="danger" content="Supprimer">
+                      <span
+                        className="text-lg text-danger cursor-pointer active:opacity-50"
+                        onClick={() => handleDeleteLeave(leave._id)}
+                      >
+                        <DeleteIcon />
+                      </span>
+                    </Tooltip>
+                  )}
                 </TableCell>
               </TableRow>
             );
