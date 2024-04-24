@@ -55,6 +55,7 @@ const LeavesToCheck = () => {
       {isGrouped &&
         employees?.map((employee: any) => {
           let leaves = employee.leaves;
+          if (leaves.length === 0) return null;
           return (
             <Table removeWrapper className="font-poppins" isCompact>
               <TableHeader>

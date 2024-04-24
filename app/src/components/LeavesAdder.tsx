@@ -14,6 +14,8 @@ import Calendar from "./Calendar";
 import Balance from "./Balance";
 import storeContext from "../contexts/Store";
 import ErrorModal from "./Modals/ErrorModal";
+import { GiConfirmed } from "react-icons/gi";
+import { RiSendPlaneFill } from "react-icons/ri";
 
 const LeavesAdder = () => {
   const leaveTypes = [
@@ -165,7 +167,13 @@ const LeavesAdder = () => {
           onChange={(e) => setComment(e.target.value)}
         />
         {/* //? SUBMIT ------------------------------------------------------ */}
-        <Button size="sm" color="success" variant="flat" onClick={onOpen}>
+        <Button
+          startContent={<RiSendPlaneFill size="16px" />}
+          size="sm"
+          color="success"
+          variant="flat"
+          onClick={onOpen}
+        >
           Confirmer
         </Button>
 
@@ -215,9 +223,6 @@ const LeavesAdder = () => {
           isOpen={errorModalOpen}
           setIsOpen={setErrorModalOpen}
         ></ErrorModal>
-      </div>
-      <div className="p-6 border rounded-xl">
-        <Balance></Balance>
       </div>
     </div>
   );

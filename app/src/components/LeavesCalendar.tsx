@@ -123,10 +123,6 @@ const LeavesCalendar = () => {
 };
 
 function datesBetween(startDate: any, endDate: any) {
-  console.log({
-    startDate: startDate,
-    endDate: endDate,
-  });
   const dates = [];
   let currentDate = moment.utc(startDate).startOf("day");
   let end_date = moment.utc(endDate).startOf("day");

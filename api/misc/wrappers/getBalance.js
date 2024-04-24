@@ -1,4 +1,3 @@
-const { listenerCount } = require("../../schema/Employee");
 const Leave = require("../../schema/Leave");
 const countNonWeekendDays = require("../countNonWeekendDays");
 
@@ -24,7 +23,7 @@ async function getBalance(req) {
       available: 0,
     },
   };
-  
+
   leaves.forEach((leave) => {
     let duration = countNonWeekendDays(
       leave.start_date,

@@ -18,7 +18,7 @@ const Employees = () => {
       });
   }, []);
   return (
-    <div className="border p-10">
+    <div className="border p-5 xl:p-10 overflow-auto">
       <h1 className="text-xl font-light text-zinc-600 ">EMPLOYÉES</h1>
 
       <Table removeWrapper className="font-poppins" isCompact>
@@ -39,7 +39,7 @@ const Employees = () => {
                 <TableCell>
                   <Chip
                     variant="flat"
-                    className="font-black"  
+                    className="font-black"
                     color={
                       employee.role === "admin"
                         ? "primary"
