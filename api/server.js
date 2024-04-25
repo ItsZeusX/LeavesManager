@@ -17,7 +17,7 @@ app.use("/api/manager", managerRouter);
 const authenticateToken = require("./middleware/authenticateToken");
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static("dist"));
+app.use(express.static(path.resolve("../app/dist/")));
 //* Connect to MongoDB -------------------------------------------------------
 const mongoose = require("mongoose");
 mongoose
