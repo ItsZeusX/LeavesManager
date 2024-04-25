@@ -2,7 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const app = express();
 const cookieParser = require("cookie-parser");
-
+const path = require("path");
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;
 
@@ -17,7 +17,7 @@ app.use("/api/manager", managerRouter);
 const authenticateToken = require("./middleware/authenticateToken");
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(express.static("dist"));
 //* Connect to MongoDB -------------------------------------------------------
 const mongoose = require("mongoose");
 mongoose
@@ -70,8 +70,13 @@ app.get("/api/authenticate", authenticateToken, (req, res) => {
     role: req.user.role,
   });
 });
+
+app.get("/*", async (req, res) => {
+  res.sendFile(path.resolve("../app/dist/index.html"));
+});
+
 //? ----------------------------------------------------------------------------------------------
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log("Server is running on port : " + PORT);
 });
